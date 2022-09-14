@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 import styled from 'styled-components'
+import "./Home.css";
 
 const Padding = styled.div`
   padding: 2em;
@@ -17,7 +18,7 @@ const Home = () => {
     setPokemons(e.target.value)
   }
 
-  const getData = (URL: string) =>
+  const getData = (URL: string) => {
     axios
       .get(URL)
       .then((res) => {
@@ -26,6 +27,7 @@ const Home = () => {
       .catch((err) => {
         console.log(err)
       })
+  }
 
   return (
     <Padding>
@@ -40,9 +42,9 @@ const Home = () => {
       <button onClick={() => getData(URL)}>Buscar</button>
 
       {!!pokemon && (
-        <div>
+        <div className="pokeContainer">
           {pokemon.map((p: any, index: number) => (
-            <div key={index}>{p.pokemon.name}</div>
+             <div className="pokeCard" key={index}>{p.pokemon.name}</div>
           ))}
         </div>
       )}
