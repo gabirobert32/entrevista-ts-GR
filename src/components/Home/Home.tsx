@@ -6,7 +6,7 @@ import { PokemonButton } from "./components/PokemonButton";
 import { PokemonCard } from "./components/PokemonCard";
 import { PokemonSelector } from "./components/PokemonSelector";
 
-const options = ["electic", "water", "fire", "ghost"];
+const options = ["electric", "water", "fire", "ghost"];
 
 const Padding = styled.div`
   padding: 2em;
@@ -41,8 +41,8 @@ const Home = () => {
 
       {!!pokemon && (
         <FlexContainer>
-          {pokemon.map(({ pokemon }: PokemonWrapper) => (
-            <PokemonCard pokemon={pokemon} />
+          {pokemon.map(({ pokemon }: PokemonWrapper, index: number) => (
+            <PokemonCard key={index} pokemon={pokemon} />
           ))}
         </FlexContainer>
       )}

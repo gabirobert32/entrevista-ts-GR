@@ -18,8 +18,8 @@ export const PokemonSelector = ({
 }: PokemonSelectorProps) => (
   <Select placeholder="Nombre de pokemon" onChange={handleChange}>
     <option value="">Seleccionar</option>
-    {options.map((o: string) => (
-      <option value={o}>{o}</option>
+    {options.map((o: string, index: number) => (
+      <option key={index} value={o}>{o}</option>
     ))}
   </Select>
 );
