@@ -1,55 +1,53 @@
-import axios from 'axios'
-import { useState } from 'react'
-import styled from 'styled-components'
-import "./Home.css";
+import axios from "axios";
+import styled from "styled-components";
+import { ChangeEvent, useState } from "react";
+import { PokemonWrapper } from "../../models/Pokemon";
+import { PokemonButton } from "./components/PokemonButton";
+import { PokemonCard } from "./components/PokemonCard";
+import { PokemonSelector } from "./components/PokemonSelector";
+
+const options = ["electic", "water", "fire", "ghost"];
 
 const Padding = styled.div`
   padding: 2em;
-`
+`;
+const FlexContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2em;
+`;
 
 const Home = () => {
-  const [pokemons, setPokemons] = useState([])
+  const [pokemonType, setPokemonType] = useState<string>("");
+  const [pokemon, setPokemon] = useState<PokemonWrapper[]>();
+  const URL = `https://pokeapi.co/api/v2/type/${pokemonType}`;
 
-  const [pokemon, setPokemon] = useState([])
+  const handleChange = ({ target }: ChangeEvent<HTMLSelectElement>) =>
+    setPokemonType(target.value);
 
-  const URL = `https://pokeapi.co/api/v2/type/${pokemons}`
-
-  const handleChange = (e: any) => {
-    setPokemons(e.target.value)
-  }
-
-  const getData = (URL: string) => {
-    axios
-      .get(URL)
-      .then((res) => {
-        setPokemon(res.data.pokemon)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const getData = async () => {
+    try {
+      const { data } = await axios.get(URL);
+      setPokemon(data.pokemon);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Padding>
-      <select placeholder="Nombre de pokemon" onChange={handleChange}>
-        <option value="">Seleccionar</option>
-        <option value="normal">Normal</option>
-        <option value="electric">Electic</option>
-        <option value="water">Water</option>
-        <option value="fire">Fire</option>
-        <option value="ghost">Ghost</option>
-      </select>
-      <button onClick={() => getData(URL)}>Buscar</button>
+      <PokemonSelector options={options} handleChange={handleChange} />
+      <PokemonButton onClick={getData} text="Buscar" />
 
       {!!pokemon && (
-        <div className="pokeContainer">
-          {pokemon.map((p: any, index: number) => (
-             <div className="pokeCard" key={index}>{p.pokemon.name}</div>
+        <FlexContainer>
+          {pokemon.map(({ pokemon }: PokemonWrapper) => (
+            <PokemonCard pokemon={pokemon} />
           ))}
-        </div>
+        </FlexContainer>
       )}
     </Padding>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
